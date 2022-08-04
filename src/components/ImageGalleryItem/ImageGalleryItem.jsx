@@ -1,16 +1,31 @@
+import React from 'react';
+import style from './imageGalleryItem.module.css';
 import PropTypes from 'prop-types';
-import s from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ webformatURL, tags, onClick }) => (
-  <li className={s.galleryItem} onClick={onClick}>
-    <img className={s.galleryImage} src={webformatURL} alt={tags} />
-  </li>
-);
-
-ImageGalleryItem.propTypes = {
-  webformatURL: PropTypes.string.isRequired,
-  tags: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+export const ImageGalleryItem = ({ value, clickModalOpen }) => {
+  return (
+    <div>
+      <li
+        className={style.gallery_item}
+        key={value.id}
+        onClick={clickModalOpen}
+        value={value.value}
+      >
+        <img
+          src={value.webformatURL}
+          alt={value.tags}
+          className={style.image}
+        />
+      </li>
+    </div>
+  );
 };
 
-export { ImageGalleryItem };
+ImageGalleryItem.propTypes = {
+  value: PropTypes.shape({
+    id: PropTypes.number,
+    webformatURL: PropTypes.string,
+    tags: PropTypes.string,
+  }),
+  clickModalOpen: PropTypes.func,
+};

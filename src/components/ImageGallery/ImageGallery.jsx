@@ -1,61 +1,87 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
-import { ImageGalleryItem } from 'components/ImageGalleryItem';
-import { Modal } from 'components/Modal';
-import s from './ImageGallery.module.css';
+import * as Scroll from 'react-scroll';
 
-function ImageGallery({ images }) {
-  const [imageIdx, setImageIdx] = useState(NaN);
+import Modal from '../Modal';
+import Loader from '../Loader';
 
-  const closeModal = () => {
-    setImageIdx(NaN);
+import api from '../../services/image-api';
+import style from './imageGallery.module.css';
+
+export default function ImageGallery({ value, page, children }) {
+  const [hits, setHits] = useState([]);
+  const [jpgData, setIpgData] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
+
+  useEffect(() => {
+    setHits([]);
+  }, [value]);
+
+  useEffect(() => {
+    if (!value) {
+      return;
+    }
+    async function fethImages() {
+      setIsLoader(true);
+      try {
+        const galleryValues = await api.fetchImage(value, page);
+        const hitsValue = await galleryValues.hits;
+        setHits(hits => [...hits, ...hitsValue]);
+        setIsLoader(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        const scroll = Scroll.animateScroll;
+        scroll.scrollToBottom({
+          duration: 1500,
+          delay: 100,
+          smooth: true,
+          offset: 50,
+        });
+      }
+    }
+    fethImages();
+  }, [page, value]);
+
+  const clickModalHandler = data => {
+    setIpgData(data);
+    setIsOpen(true);
   };
 
-  const setNextImage = () => {
-    setImageIdx(idx => (idx + 1 < images.length ? idx + 1 : 0));
-  };
-
-  const setPrevImage = () => {
-    setImageIdx(idx => (idx - 1 >= 0 ? idx - 1 : images.length - 1));
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <>
-      <ul className={s.gallery}>
-        {images.map(({ id, webformatURL, tags }, imageIdx) => (
-          <ImageGalleryItem
-            key={id}
-            webformatURL={webformatURL}
-            tags={tags}
-            onClick={() => setImageIdx(imageIdx)}
-          />
-        ))}
+    <div>
+      <ul className={style.gallery}>
+        {hits.map(hit => {
+          return (
+            <ImageGalleryItem
+              value={hit}
+              key={hit.webformatURL}
+              clickModalOpen={() => clickModalHandler(hit)}
+            />
+          );
+        })}
       </ul>
-
-      {!isNaN(imageIdx) && (
-        <Modal
-          closeModal={closeModal}
-          setNextImage={setNextImage}
-          setPrevImage={setPrevImage}
-        >
+      {isLoader && <Loader />}
+      {hits.length > 0 && children}
+      {isOpen && (
+        <Modal onClose={toggleModal}>
           <img
-            src={images[imageIdx].largeImageURL}
-            alt={images[imageIdx].tags}
+            src={jpgData.largeImageURL}
+            alt={jpgData.tags}
+            onClick={toggleModal}
           />
         </Modal>
       )}
-    </>
+    </div>
   );
 }
-
 ImageGallery.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-      tags: PropTypes.string,
-    }).isRequired,
-  ).isRequired,
+  value: PropTypes.string,
+  page: PropTypes.number,
 };
-
-export { ImageGallery };

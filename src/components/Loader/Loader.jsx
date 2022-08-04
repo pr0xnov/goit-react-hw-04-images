@@ -1,16 +1,15 @@
-import Spinner from 'react-loader-spinner';
-import s from './Loader.module.css';
+import React from 'react';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import style from './loader.module.css';
 
-const Loader = () => (
-  <div className={s.loader}>
-    <Spinner
-      type='ThreeDots'
-      color='#3d8679'
-      height={110}
-      width={110}
-      timeout={3000}
-    />
-  </div>
-);
+import { ThreeDots } from 'react-loader-spinner';
 
-export { Loader };
+const Loader = () => {
+  return (
+    <div className={style.spinner}>
+      <ThreeDots height="100" width="100" color="grey" ariaLabel="loading" />
+    </div>
+  );
+};
+
+export default Loader;

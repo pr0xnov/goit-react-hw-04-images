@@ -1,12 +1,4 @@
-.loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+.spinner {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  background-color: var(--overlay-bg-color);
-  z-index: 1200;
 }

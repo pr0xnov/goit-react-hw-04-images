@@ -1,48 +1,40 @@
-import { useState } from 'react';
+import React from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { Formik, Form, Field } from 'formik';
+import style from './searchbar.module.css';
 import PropTypes from 'prop-types';
-import { ImSearch } from 'react-icons/im';
-import s from './Searchbar.module.css';
 
-function Searchbar({ onSubmit }) {
-  const [query, setQuery] = useState('');
-
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    if (!query.trim()) return setQuery('');
-
-    onSubmit(query.trim().toLowerCase());
-    setQuery('');
+const Searchbar = ({ onSubmit }) => {
+  const handleSubmit = value => {
+    onSubmit(value.name);
   };
 
   return (
-    <header className={s.searchbar}>
-      <form className={s.searchForm} onSubmit={handleSubmit}>
-        <button
-          type='submit'
-          className={s.searchFormButton}
-          aria-label='Search images'
-        >
-          <ImSearch style={{ width: 22, height: 22 }} />
-        </button>
-
-        <input
-          className={s.searchFormInput}
-          type='text'
-          name='searchQuery'
-          value={query}
-          autoComplete='off'
-          autoFocus
-          placeholder='Search images'
-          onChange={e => setQuery(e.target.value)}
-        />
-      </form>
-    </header>
+    <div className={style.searchbar}>
+      <Formik initialValues={{ name: '' }} onSubmit={handleSubmit}>
+        <Form className={style.form}>
+          <button type="submit" className={style.button}>
+            <BiSearch size="32" />
+            <span className={style.button_label}>Search</span>
+          </button>
+          <label>
+            <Field
+              className={style.input}
+              type="text"
+              name="name"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+            />
+          </label>
+        </Form>
+      </Formik>
+    </div>
   );
-}
-
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
-export { Searchbar };
+export default Searchbar;
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
+};
