@@ -82,6 +82,6 @@ export default function ImageGallery({ value, page, children }) {
   );
 }
 ImageGallery.propTypes = {
-  value: PropTypes.string,
-  page: PropTypes.number,
+  value: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
 };

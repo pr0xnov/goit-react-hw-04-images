@@ -23,9 +23,9 @@ export const ImageGalleryItem = ({ value, clickModalOpen }) => {
 
 ImageGalleryItem.propTypes = {
   value: PropTypes.shape({
-    id: PropTypes.number,
-    webformatURL: PropTypes.string,
-    tags: PropTypes.string,
+    id: PropTypes.number.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
   }),
-  clickModalOpen: PropTypes.func,
+  clickModalOpen: PropTypes.func.isRequired,
 };
