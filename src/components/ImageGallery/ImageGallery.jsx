@@ -7,7 +7,7 @@ import Modal from '../Modal';
 import Loader from '../Loader';
 
 import api from '../../services/image-api';
-import style from './imageGallery.module.css';
+import style from './ImageGallery.module.css';
 
 export default function ImageGallery({ value, page, children }) {
   const [hits, setHits] = useState([]);

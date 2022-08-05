@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import style from './modal.module.css';
+import style from './Modal.module.css';
 import PropTypes from 'prop-types';
 
 export default function Modal({ children, onClose }) {

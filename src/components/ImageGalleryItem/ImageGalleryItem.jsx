@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './imageGalleryItem.module.css';
+import style from './ImageGalleryItem.module.css';
 import PropTypes from 'prop-types';
 
 export const ImageGalleryItem = ({ value, clickModalOpen }) => {
