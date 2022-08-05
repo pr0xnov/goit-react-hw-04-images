@@ -1,7 +1,7 @@
 import React from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { Formik, Form, Field } from 'formik';
-import style from './searchbar.module.css';
+import style from './Searchbar.module.css';
 import PropTypes from 'prop-types';
 
 const Searchbar = ({ onSubmit }) => {
